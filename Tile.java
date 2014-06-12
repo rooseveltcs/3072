@@ -1,7 +1,7 @@
 
 public class Tile {
 	private boolean canMerge;
-	private boolean hasMoved;
+	private boolean hasMoved; //holds whether the tile move the last time the act() method was called
 	private Board board;
 	private int power = 0;
 	private int multiplier;
@@ -17,8 +17,9 @@ public class Tile {
 		board.setSpace(this,x,y);
 	}
 
+	
+	//This method makes a tile move in a direction until it hits the wall or another tile
 	public void act(int direction) {
-		//System.out.print(this.power + " - ");
 		boolean play = true;
 		canMerge = true;
 		hasMoved = false;
@@ -32,7 +33,6 @@ public class Tile {
 					move(direction);
 				} 
 			}  catch (ArrayIndexOutOfBoundsException e) {
-				//System.out.print("OOB\n" + board);
 				play = false;
 			}
 		}

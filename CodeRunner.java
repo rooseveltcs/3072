@@ -4,7 +4,7 @@ public class CodeRunner {
 	public int TILE_MULTIPLIER;
 	public int POWER_SPAWN_VALUE;
 	public int moves = 0;
-	public volatile boolean runGame;
+	public boolean runGame;
 	public Board board;
 
 	public void setRunGameValues() {
@@ -30,9 +30,9 @@ public class CodeRunner {
 	}
 
 	public void excecuteTurn(int direction) {
-		if(!gameOverTest()) {
+		if(board.canMove()) {
 			board.moveContents(direction);
-			if(testTileMovement()) {
+			if(board.testTileMovement()) {
 				createRandomTile();
 				moves++;
 			}
@@ -46,49 +46,14 @@ public class CodeRunner {
 	public void createRandomTile() {
 		int x = (int)(Math.random() * board.getSize());
 		int y = (int)(Math.random() * board.getSize());
-		//problems happen when the board is full, it can't find an empty tile!!!
-		
-			while(board.getSpace(x,y) != null) {
-				x = (int)(Math.random() * board.getSize());
-				y = (int)(Math.random() * board.getSize());
-			}
-		
-			System.out.println("create");
+		//problems happen when the board is full, it can't find an empty tile!!!	
+		if(board.isFilled())
+			return;
+		while(board.getSpace(x,y) != null) {
+			x = (int)(Math.random() * board.getSize());
+			y = (int)(Math.random() * board.getSize());
+		}
 		board.setSpace(new Tile(TILE_MULTIPLIER,POWER_SPAWN_VALUE,board,x,y),x,y);
-	}
-
-	//testTileMovement() returns a boolean on whether or not at least one Tile in the Board has moved after a move
-	public boolean testTileMovement() {
-		boolean hasMoved = false;
-		for(int i = 0; i < board.getSize(); i++) {
-			for(int j = 0; j < board.getSize(); j++) {
-				try {
-					Tile current = board.getSpace(i, j);
-					if(current.getMoved()) {
-						hasMoved = true;
-					}
-				} catch(NullPointerException e) {}
-			}
-		}
-		return hasMoved;
-	}
-
-	//gameOverTest() returns a boolean based on whether or not all of the spaces in the Board are filled up
-	public boolean gameOverTest() {
-		boolean filled = board.isFilled();
-		if(filled) {
-			for(int i = 0; i < 4; i++) {
-				Board current = board.clone();
-
-				current.moveContents(i);
-
-				if(!current.isFilled()) {
-					return false;
-				}
-			}
-			return true;
-		}
-		return false;
 	}
 
 	//getMove() returns what direction the board will scan in and move all of the Tiles in; be it through a System.in scanner

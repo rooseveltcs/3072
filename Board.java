@@ -3,6 +3,7 @@ public class Board implements Cloneable {
 	//BOARD_SIZE is the variable used to create both the X and Y sizes
 	//	of playBoard
 	private final int BOARD_SIZE;
+
 	//playBoard is a two dimensional Array that holds all of the Tiles that will be seen
 	//	and manipulated by the players
 	public Tile[][] playBoard;
@@ -46,7 +47,6 @@ public class Board implements Cloneable {
 			for(int j = 0; j < copy.BOARD_SIZE; j++) {
 				Tile current = this.getSpace(i,j);
 				if(current != null) {
-					//System.out.println(current.getMultiplier() + " " + current.getPower() + " " + current.x + " " + current.y);
 					Tile tileCopy = new Tile(current.getMultiplier(),current.getPower(),copy,current.x,current.y);
 				}
 			}
@@ -54,12 +54,61 @@ public class Board implements Cloneable {
 		return copy;
 	}
 
+	//tests if a board can move in a given direction
 	public boolean canMove(int direction) {
 		Board clone = this.clone();
 		clone.moveContents(direction);
 		return !equals(clone);
 	}
-	
+
+	//return if the board can move in any direction
+	public boolean canMove(){
+		for(int i = 0; i < 4; i++){
+			if(canMove(i)){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	//testTileMovement() returns a boolean on whether or not at least one Tile in the Board has moved in its last move
+	public boolean testTileMovement() {
+		boolean hasMoved = false;
+		for(int i = 0; i < getSize(); i++) {
+			for(int j = 0; j < getSize(); j++) {
+				Tile current = getSpace(i, j);
+				if(current != null && current.getMoved()) {
+					hasMoved = true;
+				}
+			}
+		}
+		return hasMoved;
+	}
+
+	//tests if the values of every tile in the board are the same
+	public boolean equals(Board other) {
+		boolean equals = true;
+		if(other.BOARD_SIZE == this.BOARD_SIZE) {
+			for(int i = 0; i < other.BOARD_SIZE; i++) {
+				for(int j = 0; j < other.BOARD_SIZE; j++) {
+					Tile currentOther = other.getSpace(i, j);
+					Tile currentThis = this.getSpace(i, j);
+					if(currentOther == null || currentThis == null) {
+						if(currentOther != currentThis) {
+							equals = false;
+						}
+					} else if(currentOther.getValue() != currentThis.getValue()) {
+						equals = false;
+					}
+				}
+			}
+		} else {
+			equals = false;
+		}
+		return equals;
+	}
+
+	//returns whether or not every space in the playBoard in the board is full
 	public boolean isFilled() {
 		boolean filled = true;
 		for(int i = 0; i < getSize(); i++) {
@@ -73,7 +122,7 @@ public class Board implements Cloneable {
 		return filled;
 	}
 
-	//setSpace() sets the X,Y specified to the perameter Tile
+	//setSpace() sets the X,Y specified to the parameter Tile
 	public void setSpace(Tile tile, int x, int y) {
 		playBoard[x][y] = tile;
 	}
@@ -93,31 +142,8 @@ public class Board implements Cloneable {
 		return playBoard;
 	}
 
-	public boolean equals(Board other) {
-		boolean equals = true;
-		if(other.BOARD_SIZE == this.BOARD_SIZE) {
-			for(int i = 0; i < other.BOARD_SIZE; i++) {
-				for(int j = 0; j < other.BOARD_SIZE; j++) {
-					Tile currentOther = other.getSpace(i, j);
-					Tile currentThis = this.getSpace(i, j);
-//					System.out.println(currentOther.getValue());
-//					System.out.println(currentThis.getValue());
-					if(currentOther == null || currentThis == null) {
-						if(currentOther != currentThis) {
-							equals = false;
-						}
-					} else if(currentOther.getValue() != currentThis.getValue()) {
-						equals = false;
-					}
-				}
-			}
-		} else {
-			equals = false;
-		}
-		return equals;
-	}
 
-	//toString() prints out playBoard with formatting involving comas and square bracket
+	//toString() prints out playBoard with formatting involving commas and square bracket
 	public String toString() {
 		String output = "";
 		for(int i = 0; i < BOARD_SIZE; i++) {
