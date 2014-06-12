@@ -63,7 +63,7 @@ public class ArtificialInteligence {
 		List<Board> up =  bestOutcome(allPossibleOutcomesOfMove(b,0), movesDeep - 1);
 		List<Board> down =  bestOutcome(allPossibleOutcomesOfMove(b,1), movesDeep - 1);
 		double record = Double.MIN_VALUE;
-		int best = -1;
+		int best = (int)(Math.random() * 4);
 		if (assessBoard(left) > record && b.canMove(2)){
 			best = 2;
 			record = assessBoard(left);

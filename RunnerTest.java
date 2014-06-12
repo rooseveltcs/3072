@@ -8,7 +8,7 @@ public class RunnerTest {
 		ArtificialInteligence AI = new ArtificialInteligence(runner);
 		runner.startGame();
 		while(runner.runGame) {
-			int direction = AI.recommendMove(runner.board, 0);
+			int direction = AI.recommendMove(runner.board, 1);
 			System.out.println(direction);
 			runner.excecuteTurn(direction);
 		}
