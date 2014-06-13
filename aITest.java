@@ -10,8 +10,12 @@ public class aITest {
 		new Tile(2,2,b,1,1);
 		new Tile(2,3,b,1,2);
 		new Tile(2,4,b,1,3);
+		
 		System.out.println(b);
 		CodeRunner runner = new CodeRunner();
+		
+		b.createRandomTile(runner.TILE_MULTIPLIER, runner.POWER_SPAWN_VALUE);
+		System.out.println(b);
 		ArtificialInteligence AI = new ArtificialInteligence(runner);
 		double a = AI.monotonisity(b);
 		System.out.println(a);

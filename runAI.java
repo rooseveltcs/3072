@@ -5,10 +5,10 @@ public class runAI {
 	public static void main(String[] args) {
 		CodeRunner runner = new CodeRunner();
 		Scanner console = new Scanner(System.in);
-		ArtificialInteligence AI = new ArtificialInteligence(runner);
+		quickAI shelbyMoonshine = new quickAI(runner);
 		runner.startGame();
 		while(runner.board.canMove()) {
-			int direction = AI.recommendMove(runner.board,2);
+			int direction = shelbyMoonshine.recommendMove(runner.board,4);
 			System.out.println(direction);
 			runner.excecuteTurn(direction);
 		}

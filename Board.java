@@ -85,6 +85,19 @@ public class Board implements Cloneable {
 		return hasMoved;
 	}
 
+	public void createRandomTile(int tileMultiplier, int powerSpanValue) {
+		int x = (int)(Math.random() * getSize());
+		int y = (int)(Math.random() * getSize());
+		//problems happen when the board is full, it can't find an empty tile!!!	
+		if(isFilled())
+			return;
+		while(getSpace(x,y) != null) {
+			x = (int)(Math.random() * getSize());
+			y = (int)(Math.random() * getSize());
+		}
+		this.setSpace(new Tile(tileMultiplier,powerSpanValue,this,x,y),x, y) ;
+	}
+	
 	//tests if the values of every tile in the board are the same
 	public boolean equals(Board other) {
 		boolean equals = true;
