@@ -4,13 +4,16 @@ import java.util.ArrayList;
 public class aITest {
 	public static void main(String args[]){
 		Board b = new Board(4);
-		new Tile(2,1,b,2,2);
-		new Tile(2,1,b,2,3);
 		new Tile(2,1,b,2,1);
+		new Tile(2,2,b,2,2);
+		new Tile(2,3,b,2,3);
+		new Tile(2,2,b,1,1);
+		new Tile(2,3,b,1,2);
+		new Tile(2,4,b,1,3);
 		System.out.println(b);
 		CodeRunner runner = new CodeRunner();
 		ArtificialInteligence AI = new ArtificialInteligence(runner);
-		int a = AI.recommendMove(b);
+		double a = AI.monotonisity(b);
 		System.out.println(a);
 
 		

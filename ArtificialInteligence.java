@@ -29,11 +29,10 @@ public class ArtificialInteligence {
 			return recommendMove(b);
 		}
 		double record = Double.NEGATIVE_INFINITY;
-		int best = -1;
+		int best = (int) (Math.random() * 4);
 		for(int direction = 0; direction < 4; direction++){
 			List<Board> moveOutcomes = bestOutcome(allPossibleOutcomesOfMove(b,direction), movesDeep - 1);
 			double assessment = assessBoard(moveOutcomes);
-			System.out.println(assessment);
 			if (assessment > record && b.canMove(direction)){
 				best = direction;
 				record = assessment;
@@ -82,7 +81,7 @@ public class ArtificialInteligence {
 
 	//Assess the value of a single board. Currently just finds the value of a single board.
 	public double assessBoard(Board board){
-		return countOpenSpaces(board);
+		return countOpenSpaces(board) + monotonisity(board) / 20;
 	}
 
 	//Counts the number of open spaces in a board, Successfully tested
@@ -96,4 +95,32 @@ public class ArtificialInteligence {
 		}
 		return count;
 	}
+
+	public double monotonisity(Board board){
+		double monotonisityRightLeft = 0;
+		for (int i = 0; i < board.getSize(); i++){
+			Tile previousTile = null;
+			for (Tile t: board.playBoard[i]){
+				if(t != null){
+					if (previousTile != null)
+						monotonisityRightLeft += Math.signum(t.getValue()-previousTile.getValue());
+					previousTile = t;
+				}
+			}
+		}
+		double monotonisityUpDown = 0;
+		for (int j = 0; j < board.getSize(); j++){
+			Tile previousTile = null;
+			for (int i = 0; i < board.getSize(); i++){
+				Tile t = board.getSpace(i, j);
+				if(t != null){
+					if (previousTile != null)
+						monotonisityUpDown += Math.signum(t.getValue()-previousTile.getValue());
+					previousTile = t;
+				}
+			}
+		}
+		return Math.abs(monotonisityRightLeft) +  Math.abs(monotonisityUpDown);
+	}
+
 }
